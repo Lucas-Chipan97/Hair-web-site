@@ -1,0 +1,80 @@
+lcs-salon/
+│
+├── frontend/                  # Application frontend
+│   ├── public/                # Ressources statiques
+│   │   ├── favicon.ico
+│   │   ├── images/
+│   │   │   ├── logo.png
+│   │   │   ├── services/
+│   │   │   │   ├── coupe-homme.jpg
+│   │   │   │   ├── coupe-femme.jpg
+│   │   │   │   └── coloration.jpg
+│   │   │   └── hero-background.jpg
+│   │   └── robots.txt
+│   │
+│   ├── src/                   # Code source frontend
+│   │   ├── assets/            # Ressources à compiler
+│   │   │   └── css/
+│   │   │       ├── main.css
+│   │   │       └── responsive.css
+│   │   │
+│   │   ├── components/        # Composants réutilisables
+│   │   │   ├── Header.js
+│   │   │   ├── Footer.js
+│   │   │   ├── ServiceCard.js
+│   │   │   └── BookingForm.js
+│   │   │
+│   │   ├── pages/             # Pages du site
+│   │   │   ├── HomePage.js
+│   │   │   ├── BookingPage.js
+│   │   │   └── ConfirmationPage.js
+│   │   │
+│   │   ├── utils/             # Fonctions utilitaires
+│   │   │   ├── api.js         # Fonctions d'appel API
+│   │   │   └── dateUtils.js   # Fonctions de manipulation de dates
+│   │   │
+│   │   ├── App.js             # Composant principal
+│   │   └── index.js           # Point d'entrée
+│   │
+│   ├── package.json           # Dépendances frontend
+│   └── README.md              # Documentation frontend
+│
+├── backend/                   # API backend
+│   ├── api/                   # Points d'entrée API (pour Vercel/Netlify)
+│   │   ├── appointments.js    # Gestion des rendez-vous
+│   │   ├── services.js        # Gestion des services
+│   │   ├── contact.js         # Gestion des messages de contact
+│   │   └── auth.js            # Authentification pour la partie admin
+│   │
+│   ├── config/                # Configuration
+│   │   ├── database.js        # Configuration de la base de données
+│   │   └── email.js           # Configuration des emails
+│   │
+│   ├── models/                # Modèles de données
+│   │   ├── Appointment.js
+│   │   ├── Service.js
+│   │   ├── Client.js
+│   │   └── Admin.js
+│   │
+│   ├── middleware/            # Middleware
+│   │   ├── auth.js            # Middleware d'authentification
+│   │   └── validation.js      # Validation des données entrantes
+│   │
+│   ├── utils/                 # Fonctions utilitaires
+│   │   ├── emailTemplates.js  # Templates d'emails
+│   │   └── dateUtils.js       # Fonctions de manipulation de dates
+│   │
+│   ├── package.json           # Dépendances backend
+│   └── README.md              # Documentation backend
+│
+├── database/                  # Scripts de base de données
+│   ├── schema.sql             # Schéma de base de données
+│   ├── seeds.sql              # Données initiales
+│   └── migrations/            # Migrations de schéma
+│       ├── 001_initial.sql
+│       └── 002_add_services.sql
+│
+├── .env.example               # Variables d'environnement (exemple)
+├── .gitignore                 # Fichiers à ignorer par Git
+├── vercel.json                # Configuration de déploiement Vercel
+└── README.md                  # Documentation du projet
