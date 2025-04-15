@@ -3,566 +3,763 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LCS - Salon de Coiffure</title>
+    <title>LCS Barber - Coiffure à Domicile</title>
     <style>
         :root {
-            --primary-color: #000000;
-            --accent-color: #D4AF37;
-            --light-color: #f9f9f9;
-            --dark-color: #333;
-            --transition: all 0.3s ease;
+            --primary-color: #1e293b;
+            --secondary-color: #334155;
+            --accent-color: #f59e0b;
+            --light-bg: #f8fafc;
+            --dark-text: #0f172a;
+            --light-text: #f1f5f9;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         body {
-            background-color: var(--light-color);
-            color: var(--primary-color);
+            background-color: var(--light-bg);
+            color: var(--dark-text);
             line-height: 1.6;
         }
-        
-        a {
-            text-decoration: none;
-            color: var(--accent-color);
-        }
-        
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        /* Header */
+
         header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 20px 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--light-text);
+            padding: 1.5rem 2rem;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
-        
-        .header-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
+
         .logo {
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--accent-color);
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
         }
-        
-        .nav-links {
-            display: flex;
-            list-style: none;
+
+        .tagline {
+            font-size: 1.1rem;
+            opacity: 0.9;
         }
-        
-        .nav-links li {
-            margin-left: 30px;
+
+        nav {
+            background-color: #fff;
+            box-shadow: var(--box-shadow);
+            padding: 1rem 2rem;
         }
-        
-        .nav-links a {
-            color: white;
-            transition: var(--transition);
-            font-weight: 500;
-        }
-        
-        .nav-links a:hover {
-            color: var(--accent-color);
-        }
-        
-        .mobile-menu {
-            display: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: white;
-        }
-        
-        /* Hero Section */
-        .hero {
-            height: 100vh;
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&h=800&q=80') center/cover no-repeat;
-            display: flex;
-            align-items: center;
-            text-align: center;
-            color: white;
-            margin-top: 60px;
-        }
-        
-        .hero-content h1 {
-            font-size: 56px;
-            margin-bottom: 20px;
-            color: var(--accent-color);
-        }
-        
-        .hero-content p {
-            font-size: 20px;
-            margin-bottom: 30px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .btn {
-            display: inline-block;
-            background-color: var(--accent-color);
-            color: var(--primary-color);
-            padding: 12px 30px;
-            border-radius: 30px;
-            text-transform: uppercase;
-            font-weight: 700;
-            letter-spacing: 1px;
-            transition: var(--transition);
-            border: 2px solid var(--accent-color);
-            cursor: pointer;
-        }
-        
-        .btn:hover {
-            background-color: transparent;
-            color: var(--accent-color);
-        }
-        
-        /* Services Section */
-        .section {
-            padding: 100px 0;
-        }
-        
-        .section-title {
-            text-align: center;
-            margin-bottom: 50px;
-        }
-        
-        .section-title h2 {
-            font-size: 36px;
-            color: var(--primary-color);
-            margin-bottom: 15px;
-            position: relative;
-            display: inline-block;
-        }
-        
-        .section-title h2:after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 3px;
-            background-color: var(--accent-color);
-        }
-        
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-        
-        .service-card {
-            background-color: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: var(--transition);
-        }
-        
-        .service-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-        }
-        
-        .service-img {
-            height: 200px;
-            width: 100%;
-            overflow: hidden;
-        }
-        
-        .service-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: var(--transition);
-        }
-        
-        .service-card:hover .service-img img {
-            transform: scale(1.1);
-        }
-        
-        .service-content {
-            padding: 20px;
-        }
-        
-        .service-content h3 {
-            font-size: 22px;
-            margin-bottom: 10px;
-            color: var(--primary-color);
-        }
-        
-        .service-content p {
-            margin-bottom: 15px;
-            color: var(--dark-color);
-        }
-        
-        .price {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--accent-color);
-        }
-        
-        /* Booking Section */
-        .booking {
-            background-color: var(--primary-color);
-            color: white;
-        }
-        
-        .booking .section-title h2 {
-            color: white;
-        }
-        
-        .booking-form {
-            background-color: white;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: var(--primary-color);
-        }
-        
-        .form-control {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-            transition: var(--transition);
-        }
-        
-        .form-control:focus {
-            border-color: var(--accent-color);
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
-        }
-        
-        .form-row {
-            display: flex;
-            gap: 20px;
-        }
-        
-        .form-row .form-group {
-            flex: 1;
-        }
-        
-        /* Contact Section */
-        .contact-info {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            margin-bottom: 50px;
-        }
-        
-        .contact-item {
-            text-align: center;
-            padding: 30px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .contact-icon {
-            font-size: 36px;
-            color: var(--accent-color);
-            margin-bottom: 15px;
-        }
-        
-        .contact-item h3 {
-            font-size: 20px;
-            margin-bottom: 10px;
-        }
-        
-        .map {
-            height: 400px;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .map iframe {
-            width: 100%;
-            height: 100%;
-            border: 0;
-        }
-        
-        /* Footer */
-        footer {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 50px 0 20px;
-            text-align: center;
-        }
-        
-        .footer-logo {
-            font-size: 32px;
-            color: var(--accent-color);
-            margin-bottom: 20px;
-            display: block;
-        }
-        
-        .social-icons {
+
+        nav ul {
             display: flex;
             justify-content: center;
-            margin-bottom: 30px;
-            gap: 15px;
+            list-style: none;
+            gap: 2rem;
         }
-        
-        .social-icon {
+
+        nav a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--secondary-color);
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin-bottom: 2rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--accent-color);
+            color: var(--dark-text);
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            box-shadow: var(--box-shadow);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: var(--accent-color);
+        }
+
+        .services {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .service-card {
+            background-color: #fff;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #e2e8f0;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .service-image {
+            height: 200px;
+            background-color: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+        }
+
+        .service-content {
+            padding: 1.5rem;
+        }
+
+        .service-content h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .service-content p {
+            margin-bottom: 1rem;
+            color: #666;
+        }
+
+        .service-price {
+            font-weight: bold;
+            color: var(--accent-color);
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+        }
+
+        .booking-system {
+            background-color: #fff;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .booking-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .booking-day {
+            text-align: center;
+            font-weight: bold;
+            padding: 0.5rem;
+            background-color: var(--secondary-color);
+            color: var(--light-text);
+            border-radius: var(--border-radius);
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+        .time-slot {
+            text-align: center;
+            padding: 0.5rem;
+            background-color: var(--light-bg);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .time-slot:hover {
+            background-color: #e0e0e0;
+        }
+
+        .time-slot.available {
+            border: 1px solid #4CAF50;
+        }
+
+        .time-slot.booked {
+            background-color: #f0f0f0;
+            color: #999;
+            cursor: not-allowed;
+        }
+
+        .booking-form {
+            margin-top: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+        }
+
+        .submit-btn {
+            background: var(--accent-color);
+            color: var(--dark-text);
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            box-shadow: var(--box-shadow);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .testimonials {
+            margin-bottom: 3rem;
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .testimonial-card {
+            background-color: #fff;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .testimonial-card::before {
+            content: """;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 3rem;
+            color: rgba(0, 0, 0, 0.1);
+            font-family: serif;
+        }
+
+        .testimonial-content {
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+
+        .testimonial-avatar {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background-color: #333;
+            background-color: #ddd;
+            margin-right: 1rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            transition: var(--transition);
-        }
-        
-        .social-icon:hover {
-            background-color: var(--accent-color);
-            transform: translateY(-5px);
-        }
-        
-        .copyright {
-            padding-top: 20px;
-            border-top: 1px solid #444;
-            font-size: 14px;
             color: #999;
         }
-        
-        /* Responsive Design */
-        @media screen and (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-            
-            .mobile-menu {
-                display: block;
-            }
-            
-            .hero-content h1 {
-                font-size: 40px;
-            }
-            
-            .form-row {
+
+        .testimonial-name {
+            font-weight: bold;
+        }
+
+        .testimonial-date {
+            font-size: 0.9rem;
+            color: #999;
+        }
+
+        .contact-info {
+            background-color: #fff;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .contact-info h2 {
+            margin-bottom: 1rem;
+        }
+
+        .contact-methods {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-method {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            background-color: var(--accent-color);
+            color: var(--dark-text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        footer {
+            background: var(--primary-color);
+            color: var(--light-text);
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 1.5rem 0;
+        }
+
+        .footer-links a {
+            color: var(--light-text);
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            opacity: 0.8;
+        }
+
+        .copyright {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            border-radius: var(--border-radius);
+            max-width: 500px;
+            width: 90%;
+            padding: 2rem;
+            position: relative;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.3s ease;
+        }
+
+        .close-modal:hover {
+            color: var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
                 flex-direction: column;
-                gap: 0;
+                gap: 1rem;
+                align-items: center;
             }
-            
-            .section {
-                padding: 70px 0;
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .services {
+                grid-template-columns: 1fr;
+            }
+
+            .booking-grid {
+                grid-template-columns: repeat(3, 1fr);
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header>
-        <div class="container header-container">
-            <a href="#" class="logo">LCS</a>
-            <ul class="nav-links">
-                <li><a href="#home">Accueil</a></li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#booking">Réservation</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-            <div class="mobile-menu">☰</div>
-        </div>
+        <div class="logo">LCS Barber</div>
+        <div class="tagline">Le style à votre porte</div>
     </header>
-    
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <h1>LCS</h1>
-                <p>L'art de la coiffure à votre service. Un style unique pour une personnalité unique.</p>
-                <a href="#booking" class="btn">Prendre Rendez-vous</a>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Services Section -->
-    <section id="services" class="section">
-        <div class="container">
-            <div class="section-title">
-                <h2>Nos Services</h2>
-            </div>
-            <div class="services-grid">
+
+    <nav>
+        <ul>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="reservation.html">Réservation</a></li>
+            <li><a href="témoignages.html">Avis clients</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section class="hero">
+            <h1>LCS Barber - Coiffure professionnelle à domicile</h1>
+            <p>Profitez d'une expérience de coiffure personnalisée dans le confort de votre domicile. En tant que spécialiste des dégradés et des coupes tendance, je me déplace chez vous pour vous offrir un service de qualité.</p>
+            <a href="#booking" class="cta-button">Réserver maintenant</a>
+        </section>
+
+        <section id="services">
+            <h2 class="section-title">Mes services</h2>
+            <div class="services">
                 <div class="service-card">
-                    <div class="service-img">
-                        <img src="https://cdnjs.cloudflare.com/ajax/libs/simple-icons/6.5.0/placeholder.svg" alt="Coupe Homme" style="background: url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&h=300&q=80') center/cover no-repeat;">
+                    <div class="service-image">
+                        <img src="dégradé haut.png" alt="Dégradé classique" />
                     </div>
                     <div class="service-content">
-                        <h3>Coupe Homme</h3>
-                        <p>Coupe, finition et styling pour homme. Inclut un shampoing et un massage du cuir chevelu.</p>
-                        <div class="price">25€</div>
+                        <h3>Dégradé classique</h3>
+                        <p>Un dégradé parfaitement exécuté pour un look élégant et moderne.</p>
+                        <div class="service-price">À partir de 20€</div>
                     </div>
                 </div>
                 <div class="service-card">
-                    <div class="service-img">
-                        <img src="https://cdnjs.cloudflare.com/ajax/libs/simple-icons/6.5.0/placeholder.svg" alt="Coupe Femme" style="background: url('https://images.unsplash.com/photo-1562322140-8baeececf3df?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&h=300&q=80') center/cover no-repeat;">
+                    <div class="service-image">
+                        <img src="dégradé haut.png" alt="Dégradé américain" />
                     </div>
                     <div class="service-content">
-                        <h3>Coupe Femme</h3>
-                        <p>Coupe, brushing et styling personnalisé. Consultation approfondie pour un résultat parfait.</p>
-                        <div class="price">45€</div>
+                        <h3>Dégradé américain</h3>
+                        <p>Un style audacieux avec une transition parfaite entre les différentes longueurs.</p>
+                        <div class="service-price">À partir de 25€</div>
                     </div>
                 </div>
                 <div class="service-card">
-                    <div class="service-img">
-                        <img src="https://cdnjs.cloudflare.com/ajax/libs/simple-icons/6.5.0/placeholder.svg" alt="Coloration" style="background: url('https://images.unsplash.com/photo-1580618672591-eb180b1a973f?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&h=300&q=80') center/cover no-repeat;">
+                    <div class="service-image">
+                        <img src="dégradé haut.png" alt="Dégradé à blanc" />
                     </div>
                     <div class="service-content">
-                        <h3>Coloration</h3>
-                        <p>Coloration complète avec des produits de qualité. Inclut un traitement nourrissant.</p>
-                        <div class="price">65€</div>
+                        <h3>Dégradé à blanc</h3>
+                        <p>Un dégradé net et précis qui descend jusqu'à la peau pour un effet impeccable.</p>
+                        <div class="service-price">À partir de 25€</div>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-image">
+                        <img src="dégradé haut.png" alt="Dégradé à gris" />
+                    </div>
+                    <div class="service-content">
+                        <h3>Dégradé à gris</h3>
+                        <p>Un fondu subtil qui s'arrête avant la peau pour un style plus doux et naturel.</p>
+                        <div class="service-price">À partir de 22€</div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-    
-    <!-- Booking Section -->
-    <section id="booking" class="section booking">
-        <div class="container">
-            <div class="section-title">
-                <h2>Réservation</h2>
+        </section>
+
+        <section id="booking" class="booking-system">
+            <h2 class="section-title">Réserver un rendez-vous</h2>
+            <p>Sélectionnez une date et un créneau horaire disponible pour réserver votre coupe à domicile.</p>
+            
+            <div class="booking-grid">
+                <div class="booking-day">Lun</div>
+                <div class="booking-day">Mar</div>
+                <div class="booking-day">Mer</div>
+                <div class="booking-day">Jeu</div>
+                <div class="booking-day">Ven</div>
+                <div class="booking-day">Sam</div>
+                <div class="booking-day">Dim</div>
+                
+                <!-- Semaine exemple -->
+                <div class="time-slot booked">9h - 10h</div>
+                <div class="time-slot available" onclick="openBookingModal('Mardi', '9h - 10h')">9h - 10h</div>
+                <div class="time-slot available" onclick="openBookingModal('Mercredi', '9h - 10h')">9h - 10h</div>
+                <div class="time-slot booked">9h - 10h</div>
+                <div class="time-slot available" onclick="openBookingModal('Vendredi', '9h - 10h')">9h - 10h</div>
+                <div class="time-slot available" onclick="openBookingModal('Samedi', '9h - 10h')">9h - 10h</div>
+                <div class="time-slot booked">9h - 10h</div>
+                
+                <div class="time-slot available" onclick="openBookingModal('Lundi', '10h - 11h')">10h - 11h</div>
+                <div class="time-slot booked">10h - 11h</div>
+                <div class="time-slot available" onclick="openBookingModal('Mercredi', '10h - 11h')">10h - 11h</div>
+                <div class="time-slot available" onclick="openBookingModal('Jeudi', '10h - 11h')">10h - 11h</div>
+                <div class="time-slot booked">10h - 11h</div>
+                <div class="time-slot available" onclick="openBookingModal('Samedi', '10h - 11h')">10h - 11h</div>
+                <div class="time-slot booked">10h - 11h</div>
+                
+                <div class="time-slot booked">11h - 12h</div>
+                <div class="time-slot available" onclick="openBookingModal('Mardi', '11h - 12h')">11h - 12h</div>
+                <div class="time-slot booked">11h - 12h</div>
+                <div class="time-slot available" onclick="openBookingModal('Jeudi', '11h - 12h')">11h - 12h</div>
+                <div class="time-slot available" onclick="openBookingModal('Vendredi', '11h - 12h')">11h - 12h</div>
+                <div class="time-slot booked">11h - 12h</div>
+                <div class="time-slot booked">11h - 12h</div>
+                
+                <!-- Après-midi -->
+                <div class="time-slot available" onclick="openBookingModal('Lundi', '14h - 15h')">14h - 15h</div>
+                <div class="time-slot available" onclick="openBookingModal('Mardi', '14h - 15h')">14h - 15h</div>
+                <div class="time-slot available" onclick="openBookingModal('Mercredi', '14h - 15h')">14h - 15h</div>
+                <div class="time-slot booked">14h - 15h</div>
+                <div class="time-slot available" onclick="openBookingModal('Vendredi', '14h - 15h')">14h - 15h</div>
+                <div class="time-slot booked">14h - 15h</div>
+                <div class="time-slot booked">14h - 15h</div>
+                
+                <div class="time-slot booked">15h - 16h</div>
+                <div class="time-slot booked">15h - 16h</div>
+                <div class="time-slot available" onclick="openBookingModal('Mercredi', '15h - 16h')">15h - 16h</div>
+                <div class="time-slot available" onclick="openBookingModal('Jeudi', '15h - 16h')">15h - 16h</div>
+                <div class="time-slot booked">15h - 16h</div>
+                <div class="time-slot available" onclick="openBookingModal('Samedi', '15h - 16h')">15h - 16h</div>
+                <div class="time-slot booked">15h - 16h</div>
+                
+                <div class="time-slot available" onclick="openBookingModal('Lundi', '16h - 17h')">16h - 17h</div>
+                <div class="time-slot available" onclick="openBookingModal('Mardi', '16h - 17h')">16h - 17h</div>
+                <div class="time-slot booked">16h - 17h</div>
+                <div class="time-slot booked">16h - 17h</div>
+                <div class="time-slot available" onclick="openBookingModal('Vendredi', '16h - 17h')">16h - 17h</div>
+                <div class="time-slot available" onclick="openBookingModal('Samedi', '16h - 17h')">16h - 17h</div>
+                <div class="time-slot booked">16h - 17h</div>
+                
+                <div class="time-slot available" onclick="openBookingModal('Lundi', '17h - 18h')">17h - 18h</div>
+                <div class="time-slot booked">17h - 18h</div>
+                <div class="time-slot available" onclick="openBookingModal('Mercredi', '17h - 18h')">17h - 18h</div>
+                <div class="time-slot available" onclick="openBookingModal('Jeudi', '17h - 18h')">17h - 18h</div>
+                <div class="time-slot available" onclick="openBookingModal('Vendredi', '17h - 18h')">17h - 18h</div>
+                <div class="time-slot booked">17h - 18h</div>
+                <div class="time-slot booked">17h - 18h</div>
             </div>
-            <div class="booking-form">
-                <form id="appointment-form">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="name">Nom Complet</label>
-                            <input type="text" id="name" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" class="form-control" required>
+        </section>
+
+        <section id="testimonials" class="testimonials">
+            <h2 class="section-title">Avis clients</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        Le meilleur coiffeur à domicile que j'ai pu avoir ! Travail très soigné, bonne ambiance et ponctualité impeccable. Je recommande vivement !
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">TM</div>
+                        <div>
+                            <div class="testimonial-name">Thomas M.</div>
+                            <div class="testimonial-date">15 mars 2025</div>
                         </div>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="phone">Téléphone</label>
-                            <input type="tel" id="phone" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="service">Service</label>
-                            <select id="service" class="form-control" required>
-                                <option value="">Sélectionner un service</option>
-                                <option value="coupe-homme">Coupe Homme (25€)</option>
-                                <option value="coupe-femme">Coupe Femme (45€)</option>
-                                <option value="coloration">Coloration (65€)</option>
-                                <option value="coupe-coloration">Coupe & Coloration (95€)</option>
-                                <option value="barbe">Taille de Barbe (15€)</option>
-                            </select>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        Service de qualité, dégradé parfait et prix raisonnable. Le fait que ce soit à domicile est super pratique, plus besoin d'attendre dans un salon bondé !
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">KL</div>
+                        <div>
+                            <div class="testimonial-name">Kevin L.</div>
+                            <div class="testimonial-date">2 février 2025</div>
                         </div>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="date">Date</label>
-                            <input type="date" id="date" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="time">Heure</label>
-                            <select id="time" class="form-control" required>
-                                <option value="">Sélectionner une heure</option>
-                                <option value="9:00">9:00</option>
-                                <option value="10:00">10:00</option>
-                                <option value="11:00">11:00</option>
-                                <option value="12:00">12:00</option>
-                                <option value="14:00">14:00</option>
-                                <option value="15:00">15:00</option>
-                                <option value="16:00">16:00</option>
-                                <option value="17:00">17:00</option>
-                            </select>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        Très professionnel et à l'écoute. Le dégradé américain était exactement comme je le voulais. Je recommande sans hésiter !
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">AH</div>
+                        <div>
+                            <div class="testimonial-name">Alexandre H.</div>
+                            <div class="testimonial-date">20 janvier 2025</div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="message">Notes spéciales (optionnel)</label>
-                        <textarea id="message" class="form-control" rows="4"></textarea>
-                    </div>
-                    <button type="submit" class="btn">Confirmer la Réservation</button>
-                </form>
+                </div>
             </div>
-        </div>
-    </section>
-    
-    <!-- Contact Section -->
-    <section id="contact" class="section">
-        <div class="container">
-            <div class="section-title">
-                <h2>Contact</h2>
-            </div>
-            <div class="contact-info">
-                <div class="contact-item">
+        </section>
+
+        <section id="contact" class="contact-info">
+            <h2 class="section-title">Contact</h2>
+            <p>Des questions ? Besoin d'information supplémentaire ? N'hésitez pas à me contacter !</p>
+            <div class="contact-methods">
+                <div class="contact-method">
+                    <div class="contact-icon">📱</div>
+                    <div>06 XX XX XX XX</div>
+                </div>
+                <div class="contact-method">
+                    <div class="contact-icon">📧</div>
+                    <div>contact@lcsbarber.fr</div>
+                </div>
+                <div class="contact-method">
                     <div class="contact-icon">📍</div>
-                    <h3>Adresse</h3>
-                    <p>12 Rue de la Coiffure<br>75001 Paris, France</p>
-                </div>
-                <div class="contact-item">
-                    <div class="contact-icon">📞</div>
-                    <h3>Téléphone</h3>
-                    <p>+33 1 23 45 67 89</p>
-                </div>
-                <div class="contact-item">
-                    <div class="contact-icon">✉️</div>
-                    <h3>Email</h3>
-                    <p>contact@lcs-coiffure.fr</p>
-                </div>
-                <div class="contact-item">
-                    <div class="contact-icon">🕒</div>
-                    <h3>Heures d'ouverture</h3>
-                    <p>Mar-Sam: 9h - 19h<br>Dim-Lun: Fermé</p>
+                    <div>Région de [Votre Ville]</div>
                 </div>
             </div>
-            <div class="map">
-                <!-- Placeholder for Google Maps -->
-                <img src="/api/placeholder/1200/400" alt="Google Maps" style="width:100%; height:100%; object-fit: cover;">
-            </div>
-        </div>
-    </section>
-    
-    <!-- Footer -->
+        </section>
+    </main>
+
     <footer>
-        <div class="container">
-            <a href="#" class="footer-logo">LCS</a>
-            <div class="social-icons">
-                <a href="#" class="social-icon">f</a>
-                <a href="#" class="social-icon">in</a>
-                <a href="#" class="social-icon">ig</a>
+        <div class="footer-content">
+            <div class="logo">LCS Barber</div>
+            <div class="footer-links">
+                <a href="#services">Services</a>
+                <a href="#booking">Réservation</a>
+                <a href="#testimonials">Avis</a>
+                <a href="#contact">Contact</a>
             </div>
             <div class="copyright">
-                &copy; 2025 LCS Coiffure. Tous droits réservés.
+                &copy; 2025 LCS Barber. Tous droits réservés.
             </div>
         </div>
     </footer>
+
+    <!-- Modal de réservation -->
+    <div class="modal" id="bookingModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h2>Réserver un rendez-vous</h2>
+            <p id="selectedTime">Créneau sélectionné : <span></span></p>
+            <form class="booking-form">
+                <div class="form-group">
+                    <label for="name">Nom complet</label>
+                    <input type="text" id="name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Téléphone</label>
+                    <input type="tel" id="phone" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="address">Adresse complète</label>
+                    <input type="text" id="address" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="service">Service souhaité</label>
+                    <select id="service" class="form-control" required>
+                        <option value="">Sélectionnez un service</option>
+                        <option value="degrade-classique">Dégradé classique (20€)</option>
+                        <option value="degrade-americain">Dégradé américain (25€)</option>
+                        <option value="degrade-blanc">Dégradé à blanc (25€)</option>
+                        <option value="degrade-gris">Dégradé à gris (22€)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="notes">Notes ou demandes particulières</label>
+                    <textarea id="notes" class="form-control" rows="3"></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Confirmer la réservation</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Fonction pour ouvrir le modal de réservation
+        function openBookingModal(day, time) {
+            const modal = document.getElementById('bookingModal');
+            const selectedTimeSpan = document.querySelector('#selectedTime span');
+            selectedTimeSpan.textContent = day + ', ' + time;
+            modal.style.display = 'flex';
+        }
+
+        // Fonction pour fermer le modal
+        function closeModal() {
+            const modal = document.getElementById('bookingModal');
+            modal.style.display = 'none';
+        }
+
+        // Fermer le modal si on clique en dehors
+        window.onclick = function(event) {
+            const modal = document.getElementById('bookingModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Gestion du formulaire de réservation
+        document.querySelector('.booking-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Merci pour votre réservation ! Vous recevrez une confirmation par email dans les plus brefs délais.');
+            closeModal();
+        });
+    </script>
 </body>
 </html>
