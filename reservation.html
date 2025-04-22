@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Réservation - LCS Barber</title>
+    <!-- Ajout du script EmailJS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
         :root {
             --primary-color: #1e293b;
@@ -344,6 +346,50 @@
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
 
+        /* Spinner pour l'envoi du formulaire */
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: var(--accent-color);
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Message de confirmation */
+        .confirmation-message {
+            display: none;
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin-top: 1rem;
+        }
+
+        /* Message d'erreur */
+        .error-message {
+            display: none;
+            background-color: #f44336;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin-top: 1rem;
+        }
+
         .info-section {
             background-color: #fff;
             border-radius: var(--border-radius);
@@ -602,7 +648,21 @@
                         <label for="notes">Notes ou demandes particulières</label>
                         <textarea id="notes" class="form-control" placeholder="Informations complémentaires, accès, code, étage..."></textarea>
                     </div>
+                    
                     <button type="submit" class="submit-btn">Confirmer la réservation</button>
+                    
+                    <div class="loading-spinner" id="loading-spinner">
+                        <div class="spinner"></div>
+                        <p>Traitement de votre réservation...</p>
+                    </div>
+                    
+                    <div class="confirmation-message" id="confirmation-message">
+                        Votre réservation a été confirmée ! Un email de confirmation vous a été envoyé.
+                    </div>
+                    
+                    <div class="error-message" id="error-message">
+                        Une erreur est survenue. Veuillez réessayer ou nous contacter directement.
+                    </div>
                 </form>
             </div>
         </div>
@@ -647,6 +707,12 @@
     </footer>
 
     <script>
+        // Initialisation d'EmailJS (à remplacer par votre compte)
+        (function() {
+            // https://dashboard.emailjs.com/admin/account
+            emailjs.init("VOTRE_ID_UTILISATEUR_EMAILJS");
+        })();
+        
         // Fonction pour sélectionner une date
         function selectDate(day) {
             // On retire la classe selected de tous les jours
@@ -698,12 +764,20 @@
             alert(`Changement de mois ${direction === 'prev' ? 'précédent' : 'suivant'} - Fonctionnalité à implémenter`);
         }
         
-        // Gestion du formulaire
+        // Gestion du formulaire avec envoi d'email
         document.getElementById('booking-form').addEventListener('submit', function(e) {
             e.preventDefault();
             
+            // Afficher le spinner de chargement
+            document.getElementById('loading-spinner').style.display = 'block';
+            
+            // Masquer les messages précédents
+            document.getElementById('confirmation-message').style.display = 'none';
+            document.getElementById('error-message').style.display = 'none';
+            
             // Récupération des données du formulaire
             const service = document.getElementById('service').value;
+            const serviceText = document.getElementById('service').options[document.getElementById('service').selectedIndex].text;
             const name = document.getElementById('name').value;
             const phone = document.getElementById('phone').value;
             const email = document.getElementById('email').value;
@@ -714,21 +788,43 @@
             const selectedDate = document.getElementById('selected-date').textContent;
             const selectedTime = document.getElementById('selected-time').textContent;
             
-            // Affichage d'une confirmation (à remplacer par un envoi vers un serveur)
-            alert(`Réservation confirmée !\n
-                Date: ${selectedDate}\n
-                Heure: ${selectedTime}\n
-                Service: ${document.getElementById('service').options[document.getElementById('service').selectedIndex].text}\n
-                Nom: ${name}\n
-                Téléphone: ${phone}\n
-                Email: ${email}\n
-                Adresse: ${address}\n
-                Notes: ${notes}
-            `);
+            // Préparation des données pour l'envoi d'email
+            const templateParams = {
+                to_email: 'votre-email@exemple.com', // Remplacez par votre adresse email
+                from_name: name,
+                from_email: email,
+                customer_phone: phone,
+                customer_address: address,
+                service: serviceText,
+                booking_date: selectedDate,
+                booking_time: selectedTime,
+                notes: notes,
+                subject: 'Nouvelle réservation LCS Barber'
+            };
             
-            // Réinitialisation du formulaire
-            this.reset();
-        });
-    </script>
-</body>
-</html>
+            // Envoi de l'email via EmailJS
+            emailjs.send('default_service', 'template_reservation', templateParams)
+                .then(function(response) {
+                    console.log('SUCCESS!', response.status, response.text);
+                    
+                    // Masquer le spinner
+                    document.getElementById('loading-spinner').style.display = 'none';
+                    
+                    // Afficher le message de confirmation
+                    document.getElementById('confirmation-message').style.display = 'block';
+                    
+                    // Réinitialisation du formulaire
+                    document.getElementById('booking-form').reset();
+                    
+                    // Enregistrer la réservation dans la base de données (à implémenter plus tard)
+                    // saveBookingToDatabase(templateParams);
+                })
+                .catch(function(error) {
+                    console.log('FAILED...', error);
+                    
+                    // Masquer le spinner
+                    document.getElementById('loading-spinner').style.display = 'none';
+                    
+                    // Afficher le message d'erreur
+                    document.getElementById('error-message').style.display = 'block';
+                });
