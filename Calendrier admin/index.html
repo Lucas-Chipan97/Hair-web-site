@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendrier Admin - Réservations</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .nav button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .nav button:hover {
+            background: #2980b9;
+        }
+
+        .calendar {
+            padding: 20px;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: #ddd;
+            border: 1px solid #ddd;
+        }
+
+        .calendar-header {
+            background: #34495e;
+            color: white;
+            padding: 15px 5px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .calendar-day {
+            background: white;
+            min-height: 80px;
+            padding: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            position: relative;
+        }
+
+        .calendar-day:hover {
+            background: #f8f9fa;
+        }
+
+        .calendar-day.other-month {
+            background: #f8f9fa;
+            color: #bbb;
+        }
+
+        .calendar-day.reserved {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .calendar-day.reserved:hover {
+            background: #c0392b;
+        }
+
+        .day-number {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .reservation-info {
+            font-size: 11px;
+            background: rgba(255,255,255,0.2);
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            width: 400px;
+            max-width: 90%;
+        }
+
+        .modal h3 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .legend {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Calendrier de Réservations</h1>
+            <p>Interface Administrateur</p>
+        </div>
+
+        <div class="nav">
+            <button onclick="previousMonth()">← Mois précédent</button>
+            <h2 id="currentMonth"></h2>
+            <button onclick="nextMonth()">Mois suivant →</button>
+        </div>
+
+        <div class="calendar">
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: white; border: 1px solid #ddd;"></div>
+                    <span>Disponible</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #e74c3c;"></div>
+                    <span>Réservé</span>
+                </div>
+            </div>
+
+            <div class="calendar-grid" id="calendar">
+                <!-- Le calendrier sera généré ici -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal pour ajouter/modifier une réservation -->
+    <div class="modal" id="reservationModal">
+        <div class="modal-content">
+            <h3 id="modalTitle">Ajouter une réservation</h3>
+            <div class="form-group">
+                <label>Date:</label>
+                <input type="text" id="selectedDate" readonly>
+            </div>
+            <div class="form-group">
+                <label>Nom du client:</label>
+                <input type="text" id="clientName" placeholder="Nom du client">
+            </div>
+            <div class="form-group">
+                <label>Téléphone (optionnel):</label>
+                <input type="text" id="clientPhone" placeholder="Numéro de téléphone">
+            </div>
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closeModal()">Annuler</button>
+                <button class="btn btn-danger" id="deleteBtn" onclick="deleteReservation()" style="display: none;">Supprimer</button>
+                <button class="btn btn-primary" onclick="saveReservation()">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales
+        let currentDate = new Date();
+        let reservations = {};
+        let selectedDateKey = '';
+
+        const monthNames = [
+            'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
+            'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
+        ];
+
+        const dayNames = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            generateCalendar();
+        });
+
+        function generateCalendar() {
+            const calendar = document.getElementById('calendar');
+            const monthTitle = document.getElementById('currentMonth');
+            
+            // Titre du mois
+            monthTitle.textContent = `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
+            
+            // Vider le calendrier
+            calendar.innerHTML = '';
+            
+            // En-têtes des jours
+            dayNames.forEach(day => {
+                const header = document.createElement('div');
+                header.className = 'calendar-header';
+                header.textContent = day;
+                calendar.appendChild(header);
+            });
+            
+            // Premier jour du mois et nombre de jours
+            const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+            const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+            const startDate = new Date(firstDay);
+            startDate.setDate(startDate.getDate() - firstDay.getDay());
+            
+            // Générer 42 jours (6 semaines)
+            for (let i = 0; i < 42; i++) {
+                const cellDate = new Date(startDate);
+                cellDate.setDate(startDate.getDate() + i);
+                
+                const dayCell = document.createElement('div');
+                dayCell.className = 'calendar-day';
+                
+                const dayNumber = document.createElement('div');
+                dayNumber.className = 'day-number';
+                dayNumber.textContent = cellDate.getDate();
+                dayCell.appendChild(dayNumber);
+                
+                // Vérifier si c'est un autre mois
+                if (cellDate.getMonth() !== currentDate.getMonth()) {
+                    dayCell.classList.add('other-month');
+                }
+                
+                // Vérifier s'il y a une réservation
+                const dateKey = cellDate.toISOString().split('T')[0];
+                if (reservations[dateKey]) {
+                    dayCell.classList.add('reserved');
+                    const reservationInfo = document.createElement('div');
+                    reservationInfo.className = 'reservation-info';
+                    reservationInfo.textContent = reservations[dateKey].name;
+                    dayCell.appendChild(reservationInfo);
+                }
+                
+                // Ajouter l'événement de clic
+                dayCell.addEventListener('click', () => openModal(dateKey, cellDate));
+                
+                calendar.appendChild(dayCell);
+            }
+        }
+
+        function openModal(dateKey, date) {
+            selectedDateKey = dateKey;
+            const modal = document.getElementById('reservationModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const selectedDateInput = document.getElementById('selectedDate');
+            const clientNameInput = document.getElementById('clientName');
+            const clientPhoneInput = document.getElementById('clientPhone');
+            const deleteBtn = document.getElementById('deleteBtn');
+            
+            // Formater la date pour l'affichage
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            selectedDateInput.value = date.toLocaleDateString('fr-FR', options);
+            
+            // Vérifier s'il y a déjà une réservation
+            if (reservations[dateKey]) {
+                modalTitle.textContent = 'Modifier la réservation';
+                clientNameInput.value = reservations[dateKey].name;
+                clientPhoneInput.value = reservations[dateKey].phone || '';
+                deleteBtn.style.display = 'inline-block';
+            } else {
+                modalTitle.textContent = 'Ajouter une réservation';
+                clientNameInput.value = '';
+                clientPhoneInput.value = '';
+                deleteBtn.style.display = 'none';
+            }
+            
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('reservationModal').style.display = 'none';
+        }
+
+        function saveReservation() {
+            const clientName = document.getElementById('clientName').value.trim();
+            const clientPhone = document.getElementById('clientPhone').value.trim();
+            
+            if (!clientName) {
+                alert('Veuillez entrer un nom de client');
+                return;
+            }
+            
+            reservations[selectedDateKey] = {
+                name: clientName,
+                phone: clientPhone
+            };
+            
+            generateCalendar();
+            closeModal();
+        }
+
+        function deleteReservation() {
+            if (confirm('Êtes-vous sûr de vouloir supprimer cette réservation ?')) {
+                delete reservations[selectedDateKey];
+                generateCalendar();
+                closeModal();
+            }
+        }
+
+        function previousMonth() {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            generateCalendar();
+        }
+
+        function nextMonth() {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            generateCalendar();
+        }
+
+        // Fermer la modal en cliquant à l'extérieur
+        window.addEventListener('click', function(e) {
+            const modal = document.getElementById('reservationModal');
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

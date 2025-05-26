@@ -1,0 +1,18 @@
+Créez un compte sur EmailJS (gratuit jusqu'à 200 emails/mois)
+Connectez un service email (Gmail, Outlook, etc.)
+Créez un template d'email simple avec les variables {{subject}} et {{message}}
+Notez les identifiants de service et template, ainsi que votre clé publique
+
+Cette solution est :
+
+Simple à mettre en place
+Ne nécessite pas de serveur backend
+Fonctionne dans n'importe quel navigateur
+Peut être utilisée indépendamment de votre site web
+
+Vous pouvez aussi personnaliser le message de la notification selon vos besoins spécifiques en modifiant la valeur de templateParams.message.
+
+
+
+
+
