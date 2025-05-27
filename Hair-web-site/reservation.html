@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Réservation - LCS Barber</title>
+    <style>
+        :root {
+            --primary-color: #1e293b;
+            --secondary-color: #334155;
+            --accent-color: #f59e0b;
+            --light-bg: #f8fafc;
+            --dark-text: #0f172a;
+            --light-text: #f1f5f9;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            line-height: 1.6;
+        }
+
+        header {
+            background: var(--primary-color);
+            color: var(--light-text);
+            padding: 1.5rem 2rem;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        nav {
+            background-color: #fff;
+            box-shadow: var(--box-shadow);
+            padding: 1rem 2rem;
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--accent-color);
+        }
+
+        nav a.active {
+            color: var(--accent-color);
+            position: relative;
+        }
+
+        nav a.active::after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--accent-color);
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .page-description {
+            max-width: 800px;
+            margin: 0 auto;
+            color: #64748b;
+        }
+
+        .booking-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .booking-calendar {
+            background-color: #fff;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 2rem;
+        }
+
+        .month-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .month-title {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .month-nav {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .month-nav-btn {
+            background-color: var(--light-bg);
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .month-nav-btn:hover {
+            background-color: #e2e8f0;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+        }
+
+        .calendar-day-name {
+            text-align: center;
+            font-weight: bold;
+            padding: 0.5rem;
+            color: var(--secondary-color);
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        .calendar-day {
+            text-align: center;
+            padding: 0.8rem 0;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .calendar-day:hover:not(.unavailable) {
+            background-color: #e2e8f0;
+        }
+
+        .calendar-day.available {
+            border: 1px solid #4CAF50;
+            font-weight: bold;
+        }
+
+        .calendar-day.unavailable {
+            color: #cbd5e1;
+            cursor: not-allowed;
+        }
+
+        .calendar-day.selected {
+            background-color: var(--accent-color);
+            color: var(--dark-text);
+            font-weight: bold;
+        }
+
+        .time-slots {
+            margin-top: 2rem;
+        }
+
+        .time-slot-title {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .time-slots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 0.5rem;
+        }
+
+        .time-slot {
+            text-align: center;
+            padding: 0.8rem 0.5rem;
+            background-color: var(--light-bg);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .time-slot:hover:not(.booked) {
+            background-color: #e2e8f0;
+        }
+
+        .time-slot.available {
+            border: 1px solid #4CAF50;
+        }
+
+        .time-slot.booked {
+            background-color: #f0f0f0;
+            color: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        .time-slot.selected {
+            background-color: var(--accent-color);
+            color: var(--dark-text);
+            font-weight: bold;
+        }
+
+        .booking-form-container {
+            background-color: #fff;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 2rem;
+        }
+
+        .form-title {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .selection-summary {
+            background-color: #f1f5f9;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-left: 3px solid var(--accent-color);
+        }
+
+        .summary-title {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-label {
+            font-weight: 600;
+            margin-right: 0.5rem;
+            color: var(--secondary-color);
+        }
+
+        .summary-value {
+            color: var(--dark-text);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #cbd5e1;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .form-control::placeholder {
+            color: #94a3b8;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .submit-btn {
+            background: var(--accent-color);
+            color: var(--dark-text);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: var(--box-shadow);
+            width: 100%;
+            font-size: 1rem;
+            margin-top: 1rem;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .info-section {
+            background-color: #fff;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        .info-title {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .info-card {
+            background-color: #f1f5f9;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            border-left: 3px solid var(--accent-color);
+        }
+
+        .info-card-title {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .info-card p {
+            color: #64748b;
+        }
+
+        footer {
+            background: var(--primary-color);
+            color: var(--light-text);
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--light-text);
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            opacity: 0.8;
+        }
+
+        .copyright {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 992px) {
+            .booking-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: center;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .page-description {
+                font-size: 0.9rem;
+            }
+
+            .time-slots-grid {
+                grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">LCS Barber</div>
+        <div class="tagline">Le style à votre porte</div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="booking.html" class="active">Réservation</a></li>
+            <li><a href="testimonials.html">Avis clients</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <div class="page-header">
+            <h1 class="page-title">Réserver un rendez-vous</h1>
+            <p class="page-description">
+                Choisissez une date et un créneau horaire qui vous conviennent pour votre séance de coiffure à domicile. 
+                Je me déplacerai chez vous avec tout le matériel nécessaire pour vous offrir une prestation de qualité.
+            </p>
+        </div>
+
+        <div class="booking-container">
+            <div class="booking-calendar">
+                <div class="month-header">
+                    <div class="month-title">Avril 2025</div>
+                    <div class="month-nav">
+                        <button class="month-nav-btn" onclick="changeMonth('prev')">&#10094;</button>
+                        <button class="month-nav-btn" onclick="changeMonth('next')">&#10095;</button>
+                    </div>
+                </div>
+
+                <div class="calendar-grid">
+                    <div class="calendar-day-name">Lun</div>
+                    <div class="calendar-day-name">Mar</div>
+                    <div class="calendar-day-name">Mer</div>
+                    <div class="calendar-day-name">Jeu</div>
+                    <div class="calendar-day-name">Ven</div>
+                    <div class="calendar-day-name">Sam</div>
+                    <div class="calendar-day-name">Dim</div>
+
+                    <div class="calendar-day unavailable">31</div>
+                    <div class="calendar-day available" onclick="selectDate(1)">1</div>
+                    <div class="calendar-day available" onclick="selectDate(2)">2</div>
+                    <div class="calendar-day available" onclick="selectDate(3)">3</div>
+                    <div class="calendar-day available" onclick="selectDate(4)">4</div>
+                    <div class="calendar-day available" onclick="selectDate(5)">5</div>
+                    <div class="calendar-day unavailable">6</div>
+
+                    <div class="calendar-day available" onclick="selectDate(7)">7</div>
+                    <div class="calendar-day available" onclick="selectDate(8)">8</div>
+                    <div class="calendar-day available" onclick="selectDate(9)">9</div>
+                    <div class="calendar-day available" onclick="selectDate(10)">10</div>
+                    <div class="calendar-day available" onclick="selectDate(11)">11</div>
+                    <div class="calendar-day available" onclick="selectDate(12)">12</div>
+                    <div class="calendar-day unavailable">13</div>
+
+                    <div class="calendar-day available" onclick="selectDate(14)">14</div>
+                    <div class="calendar-day selected" onclick="selectDate(15)">15</div>
+                    <div class="calendar-day available" onclick="selectDate(16)">16</div>
+                    <div class="calendar-day available" onclick="selectDate(17)">17</div>
+                    <div class="calendar-day available" onclick="selectDate(18)">18</div>
+                    <div class="calendar-day available" onclick="selectDate(19)">19</div>
+                    <div class="calendar-day unavailable">20</div>
+
+                    <div class="calendar-day available" onclick="selectDate(21)">21</div>
+                    <div class="calendar-day available" onclick="selectDate(22)">22</div>
+                    <div class="calendar-day available" onclick="selectDate(23)">23</div>
+                    <div class="calendar-day available" onclick="selectDate(24)">24</div>
+                    <div class="calendar-day available" onclick="selectDate(25)">25</div>
+                    <div class="calendar-day available" onclick="selectDate(26)">26</div>
+                    <div class="calendar-day unavailable">27</div>
+
+                    <div class="calendar-day available" onclick="selectDate(28)">28</div>
+                    <div class="calendar-day available" onclick="selectDate(29)">29</div>
+                    <div class="calendar-day available" onclick="selectDate(30)">30</div>
+                    <div class="calendar-day unavailable">1</div>
+                    <div class="calendar-day unavailable">2</div>
+                    <div class="calendar-day unavailable">3</div>
+                    <div class="calendar-day unavailable">4</div>
+                </div>
+
+                <div class="time-slots">
+                    <h3 class="time-slot-title">Créneaux disponibles - Mardi 15 Avril</h3>
+                    <div class="time-slots-grid">
+                        <div class="time-slot booked">9h00</div>
+                        <div class="time-slot booked">9h30</div>
+                        <div class="time-slot available" onclick="selectTimeSlot('10h00')">10h00</div>
+                        <div class="time-slot available" onclick="selectTimeSlot('10h30')">10h30</div>
+                        <div class="time-slot booked">11h00</div>
+                        <div class="time-slot available" onclick="selectTimeSlot('11h30')">11h30</div>
+                        <div class="time-slot available" onclick="selectTimeSlot('12h00')">12h00</div>
+                        <div class="time-slot booked">12h30</div>
+                        <div class="time-slot booked">14h00</div>
+                        <div class="time-slot selected" onclick="selectTimeSlot('14h30')">14h30</div>
+                        <div class="time-slot available" onclick="selectTimeSlot('15h00')">15h00</div>
+                        <div class="time-slot available" onclick="selectTimeSlot('15h30')">15h30</div>
+                        <div class="time-slot booked">16h00</div>
+                        <div class="time-slot available" onclick="selectTimeSlot('16h30')">16h30</div>
+                        <div class="time-slot available" onclick="selectTimeSlot('17h00')">17h00</div>
+                        <div class="time-slot available" onclick="selectTimeSlot('17h30')">17h30</div>
+                        <div class="time-slot available" onclick="selectTimeSlot('18h00')">18h00</div>
+                        <div class="time-slot booked">18h30</div>
+                        <div class="time-slot available" onclick="selectTimeSlot('19h00')">19h00</div>
+                        <div class="time-slot available" onclick="selectTimeSlot('19h30')">19h30</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="booking-form-container">
+                <h2 class="form-title">Vos informations</h2>
+                <div class="selection-summary">
+                    <h3 class="summary-title">Récapitulatif de votre réservation</h3>
+                    <div class="summary-item">
+                        <span class="summary-label">Date :</span>
+                        <span class="summary-value" id="selected-date">Mardi 15 Avril 2025</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Heure :</span>
+                        <span class="summary-value" id="selected-time">14h30</span>
+                    </div>
+                </div>
+
+                <form id="booking-form">
+                    <div class="form-group">
+                        <label for="service">Service souhaité</label>
+                        <select id="service" class="form-control" required>
+                            <option value="">Sélectionnez un service</option>
+                            <option value="degrade-classique">Dégradé classique (20€)</option>
+                            <option value="degrade-americain">Dégradé américain (25€)</option>
+                            <option value="degrade-blanc">Dégradé à blanc (25€)</option>
+                            <option value="degrade-gris">Dégradé à gris (22€)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Nom complet</label>
+                        <input type="text" id="name" class="form-control" placeholder="Votre nom et prénom" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Téléphone</label>
+                        <input type="tel" id="phone" class="form-control" placeholder="Votre numéro de téléphone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" class="form-control" placeholder="Votre adresse email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Adresse complète</label>
+                        <input type="text" id="address" class="form-control" placeholder="Adresse où vous souhaitez recevoir la prestation" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="notes">Notes ou demandes particulières</label>
+                        <textarea id="notes" class="form-control" placeholder="Informations complémentaires, accès, code, étage..."></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Confirmer la réservation</button>
+                </form>
+            </div>
+        </div>
+
+        <section class="info-section">
+            <h2 class="info-title">Informations utiles</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3 class="info-card-title">Comment se déroule le rendez-vous ?</h3>
+                    <p>Je me déplace à l'heure convenue avec tout mon matériel professionnel. Prévoyez simplement un espace dégagé avec une prise électrique à proximité.</p>
+                </div>
+                <div class="info-card">
+                    <h3 class="info-card-title">Politique d'annulation</h3>
+                    <p>Vous pouvez annuler ou modifier votre rendez-vous jusqu'à 24h à l'avance sans frais. Pour toute annulation tardive, des frais peuvent s'appliquer.</p>
+                </div>
+                <div class="info-card">
+                    <h3 class="info-card-title">Zone de déplacement</h3>
+                    <p>Je me déplace dans un rayon de 20 km autour de [Votre Ville]. Pour les déplacements plus longs, des frais supplémentaires peuvent s'appliquer.</p>
+                </div>
+                <div class="info-card">
+                    <h3 class="info-card-title">Moyens de paiement</h3>
+                    <p>J'accepte les paiements en espèces et par virement bancaire. Le règlement s'effectue à la fin de la prestation.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="logo">LCS Barber</div>
+            <div class="footer-links">
+                <a href="index.html">Accueil</a>
+                <a href="services.html">Services</a>
+                <a href="booking.html">Réservation</a>
+                <a href="testimonials.html">Avis</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            <div class="copyright">
+                &copy; 2025 LCS Barber. Tous droits réservés.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Fonction pour sélectionner une date
+        function selectDate(day) {
+            // On retire la classe selected de tous les jours
+            const days = document.querySelectorAll('.calendar-day');
+            days.forEach(d => {
+                if (d.classList.contains('selected')) {
+                    d.classList.remove('selected');
+                }
+            });
+            
+            // On ajoute la classe selected au jour cliqué
+            event.target.classList.add('selected');
+            
+            // On met à jour le récapitulatif
+            const monthNames = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+            const dayNames = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
+            
+            const date = new Date(2025, 3, day); // Avril 2025
+            const dayName = dayNames[date.getDay()];
+            const monthName = monthNames[date.getMonth()];
+            
+            document.getElementById('selected-date').textContent = `${dayName} ${day} ${monthName} 2025`;
+            
+            // On met à jour le titre des créneaux
+            document.querySelector('.time-slot-title').textContent = `Créneaux disponibles - ${dayName} ${day} ${monthName}`;
+        }
+        
+        // Fonction pour sélectionner un créneau horaire
+        function selectTimeSlot(time) {
+            // On retire la classe selected de tous les créneaux
+            const slots = document.querySelectorAll('.time-slot');
+            slots.forEach(slot => {
+                if (slot.classList.contains('selected')) {
+                    slot.classList.remove('selected');
+                }
+            });
+            
+            // On ajoute la classe selected au créneau cliqué
+            event.target.classList.add('selected');
+            
+            // On met à jour le récapitulatif
+            document.getElementById('selected-time').textContent = time;
+        }
+        
+        // Fonction pour changer de mois
+        function changeMonth(direction) {
+            // Cette fonction serait implémentée pour naviguer entre les mois
+            // Pour cet exemple, nous ne faisons rien car nous n'avons qu'un mois affiché
+            alert(`Changement de mois ${direction === 'prev' ? 'précédent' : 'suivant'} - Fonctionnalité à implémenter`);
+        }
+        
+        // Gestion du formulaire
+        document.getElementById('booking-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Récupération des données du formulaire
+            const service = document.getElementById('service').value;
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            const address = document.getElementById('address').value;
+            const notes = document.getElementById('notes').value;
+            
+            // Récupération de la date et de l'heure sélectionnées
+            const selectedDate = document.getElementById('selected-date').textContent;
+            const selectedTime = document.getElementById('selected-time').textContent;
+            
+            // Affichage d'une confirmation (à remplacer par un envoi vers un serveur)
+            alert(`Réservation confirmée !\n
+                Date: ${selectedDate}\n
+                Heure: ${selectedTime}\n
+                Service: ${document.getElementById('service').options[document.getElementById('service').selectedIndex].text}\n
+                Nom: ${name}\n
+                Téléphone: ${phone}\n
+                Email: ${email}\n
+                Adresse: ${address}\n
+                Notes: ${notes}
+            `);
+            
+            // Réinitialisation du formulaire
+            this.reset();
+        });
+    </script>
+</body>
+</html>

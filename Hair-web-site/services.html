@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services - LCS Barber</title>
+    <style>
+        :root {
+            --primary-color: #1e293b;
+            --secondary-color: #334155;
+            --accent-color: #f59e0b;
+            --light-bg: #f8fafc;
+            --dark-text: #0f172a;
+            --light-text: #f1f5f9;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            line-height: 1.6;
+        }
+
+        header {
+            background: var(--primary-color);
+            color: var(--light-text);
+            padding: 1.5rem 2rem;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        nav {
+            background-color: #fff;
+            box-shadow: var(--box-shadow);
+            padding: 1rem 2rem;
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--accent-color);
+        }
+
+        nav a.active {
+            color: var(--accent-color);
+            position: relative;
+        }
+
+        nav a.active::after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--accent-color);
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .page-description {
+            max-width: 800px;
+            margin: 0 auto;
+            color: #64748b;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .service-card {
+            background-color: #fff;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #e2e8f0;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.15);
+        }
+
+        .service-image {
+            height: 200px;
+            background-color: #ddd;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .service-card:hover .service-image img {
+            transform: scale(1.05);
+        }
+
+        .service-content {
+            padding: 1.5rem;
+        }
+
+        .service-title {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-size: 1.25rem;
+        }
+
+        .service-description {
+            color: #64748b;
+            margin-bottom: 1rem;
+        }
+
+        .service-duration {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .service-price {
+            font-weight: bold;
+            color: var(--accent-color);
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+        }
+
+        .service-details {
+            margin-top: 1.5rem;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .detail-icon {
+            margin-right: 0.5rem;
+            color: var(--accent-color);
+        }
+
+        .book-button {
+            display: inline-block;
+            background: var(--accent-color);
+            color: var(--dark-text);
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 1rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .book-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--accent-color);
+        }
+
+        .additional-info {
+            background-color: #fff;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-top: 3rem;
+            box-shadow: var(--box-shadow);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        .info-card {
+            padding: 1.5rem;
+            background-color: #f1f5f9;
+            border-radius: var(--border-radius);
+            border-left: 3px solid var(--accent-color);
+        }
+
+        .info-title {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .faq-section {
+            margin-top: 3rem;
+        }
+
+        .faq-item {
+            margin-bottom: 1.5rem;
+            background-color: #fff;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow);
+        }
+
+        .faq-question {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-answer {
+            color: #64748b;
+            padding-top: 0.5rem;
+        }
+
+        footer {
+            background: var(--primary-color);
+            color: var(--light-text);
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 1.5rem 0;
+        }
+
+        .footer-links a {
+            color: var(--light-text);
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            opacity: 0.8;
+        }
+
+        .copyright {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: center;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">LCS Barber</div>
+        <div class="tagline">Le style à votre porte</div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="services.html" class="active">Services</a></li>
+            <li><a href="booking.html">Réservation</a></li>
+            <li><a href="testimonials.html">Avis clients</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <div class="page-header">
+            <h1 class="page-title">Mes Services</h1>
+            <p class="page-description">
+                En tant que LCS Barber, je vous propose des prestations de coiffure de qualité à domicile. 
+                Spécialiste des dégradés, je m'adapte à vos besoins pour vous offrir le style qui vous correspond.
+            </p>
+        </div>
+
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-image">
+                    <img src="/api/placeholder/400/200" alt="Dégradé classique">
+                </div>
+                <div class="service-content">
+                    <h3 class="service-title">Dégradé classique</h3>
+                    <p class="service-description">
+                        Un dégradé parfaitement exécuté pour un look élégant et moderne, avec une transition fluide entre les différentes longueurs.
+                    </p>
+                    <p class="service-duration">Durée: environ 30 minutes</p>
+                    <div class="service-details">
+                        <div class="detail-item">
+                            <span class="detail-icon">✓</span>
+                            <span>Transition progressive entre les longueurs</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">✓</span>
+                            <span>Finition soignée aux ciseaux</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">✓</span>
+                            <span>Coupe adaptée à votre morphologie</span>
+                        </div>
+                    </div>
+                    <div class="service-price">À partir de 20€</div>
+                    <a href="booking.html" class="book-button">Réserver</a>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <div class="service-image">
+                    <img src="/api/placeholder/400/200" alt="Dégradé américain">
+                </div>
+                <div class="service-content">
+                    <h3 class="service-title">Dégradé américain</h3>
+                    <p class="service-description">
+                        Un style audacieux avec une transition parfaite entre les différentes longueurs. Idéal pour un look affirmé et tendance.
+                    </p>
+                    <p class="service-duration">Durée: environ 35 minutes</p>
+                    <div class="service-details">
+                        <div class="detail-item">
+                            <span class="detail-icon">✓</span>
+                            <span>Contrastes marqués entre les longueurs</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">✓</span>
+                            <span>Adapté à tous types de cheveux</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">✓</span>
+                            <span>Style contemporain très demandé</span>
+                        </div>
+                    </div>
+                    <div class="service-price">À partir de 25€</div>
+                    <a href="booking.html" class="book-button">Réserver</a>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <div class="service-image">
+                    <img src="/api/placeholder/400/200" alt="Dégradé à blanc">
+                </div>
+                <div class="service-content">
+                    <h3 class="service-title">Dégradé à blanc</h3>
+                    <p class="service-description">
+                        Un dégradé net et précis qui descend jusqu'à la peau pour un effet impeccable. Parfait pour un look net et soigné.
+                    </p>
+                    <p class="service-duration">Durée: environ 40 minutes</p>
+                    <div class="service-details">
+                        <div class="detail-item">
+                            <span class="detail-icon">✓</span>
+                            <span>Fondu jusqu'à la peau (skin fade)</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">✓</span>
+                            <span>Contrastes nets et précis</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">✓</span>
+                            <span>Idéal pour les looks tendance</span>
+                        </div>
+                    </div>
+                    <div class="service-price">À partir de 25€</div>
+                    <a href="booking.html" class="book-button">Réserver</a>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <div class="service-image">
+                    <img src="/api/placeholder/400/200" alt="Dégradé à gris">
+                </div>
+                <div class="service-content">
+                    <h3 class="service-title">Dégradé à gris</h3>
+                    <p class="service-description">
+                        Un fondu subtil qui s'arrête avant la peau pour un style plus doux et naturel. Idéal pour un look professionnel.
+                    </p>
+                    <p class="service-duration">Durée: environ 35 minutes</p>
+                    <div class="service-details">
+                        <div class="detail-item">
+                            <span class="detail-icon">✓</span>
+                            <span>Transition douce et naturelle</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">✓</span>
+                            <span>Coupe élégante qui convient à tous</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">✓</span>
+                            <span>Entretien facile et durable</span>
+                        </div>
+                    </div>
+                    <div class="service-price">À partir de 22€</div>
+                    <a href="booking.html" class="book-button">Réserver</a>
+                </div>
+            </div>
+        </div>
+
+        <section class="additional-info">
+            <h2 class="section-title">Informations complémentaires</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3 class="info-title">Service à domicile</h3>
+                    <p>
+                        Profitez du confort de votre domicile pour votre coupe de cheveux. Je me déplace avec tout le matériel nécessaire pour vous offrir une prestation de qualité.
+                    </p>
+                </div>
+                <div class="info-card">
+                    <h3 class="info-title">Matériel professionnel</h3>
+                    <p>
+                        J'utilise uniquement des outils et produits professionnels pour garantir un résultat optimal et durable.
+                    </p>
+                </div>
+                <div class="info-card">
+                    <h3 class="info-title">Conseils personnalisés</h3>
+                    <p>
+                        Je vous propose des conseils adaptés à votre type de cheveux et à votre morphologie pour trouver le style qui vous correspond le mieux.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="faq-section">
+            <h2 class="section-title">Questions fréquentes</h2>
+            <div class="faq-item">
+                <div class="faq-question">
+                    Comment se déroule une séance de coiffure à domicile ?
+                </div>
+                <div class="faq-answer">
+                    Je me déplace à l'heure convenue avec tout mon matériel. Il suffit de prévoir un espace dégagé avec une prise électrique. Je m'occupe de tout installer et de tout nettoyer après la prestation.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    Quels moyens de paiement acceptez-vous ?
+                </div>
+                <div class="faq-answer">
+                    J'accepte les paiements en espèces et par virement. Le paiement s'effectue à la fin de la prestation.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    Quelle est la zone géographique couverte ?
+                </div>
+                <div class="faq-answer">
+                    Je me déplace dans un rayon de 20 km autour de [Votre Ville]. Pour les déplacements plus longs, des frais supplémentaires peuvent s'appliquer.
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="logo">LCS Barber</div>
+            <div class="footer-links">
+                <a href="index.html">Accueil</a>
+                <a href="services.html">Services</a>
+                <a href="booking.html">Réservation</a>
+                <a href="testimonials.html">Avis</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            <div class="copyright">
+                &copy; 2025 LCS Barber. Tous droits réservés.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

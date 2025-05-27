@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Envoyer une notification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .hidden-form {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h2>Envoyer une notification</h2>
+    <p>Cliquez sur le bouton pour envoyer une notification à votre email.</p>
+    
+    <button onclick="document.getElementById('notificationForm').submit();">
+        Envoyer une notification
+    </button>
+    
+    <!-- Formulaire caché qui utilise formsubmit.co -->
+    <form id="notificationForm" action="https://formsubmit.co/lucas.chipan97@gmail.com" method="POST" class="hidden-form">
+        <!-- Remplacez VOTRE_EMAIL_ICI par votre adresse email -->
+        
+        <!-- Configuration de formsubmit.co -->
+        <input type="hidden" name="_subject" value="Nouvelle notification LCS Barber">
+        <input type="hidden" name="_captcha" value="false">
+        
+        <!-- Contenu de la notification -->
+        <input type="hidden" name="message" value="Vous avez reçu une nouvelle réservation.">
+        <input type="hidden" name="date" value="Date: Automatique">
+        <input type="hidden" name="heure" value="Heure: Automatique">
+        
+        <!-- Vous pouvez ajouter d'autres champs cachés selon vos besoins -->
+    </form>
+    
+    <script>
+        // Ajout automatique de la date et l'heure actuelles
+        window.onload = function() {
+            const now = new Date();
+            const dateStr = now.toLocaleDateString();
+            const timeStr = now.toLocaleTimeString();
+            
+            document.querySelector('input[name="date"]').value = "Date: " + dateStr;
+            document.querySelector('input[name="heure"]').value = "Heure: " + timeStr;
+        };
+    </script>
+</body>
+</html>
